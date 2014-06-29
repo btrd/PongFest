@@ -13,19 +13,20 @@ while game.isStopped():
 	game.receiveServerCommands()
 
 while not game.isStopped():
-	
 	game.receiveServerCommands()
 
+	#afficher le score
+
 	if game.player1_keys:
-		if game.player1_keys.yn :
-			p1.up()
 		if game.player1_keys.yp :
+			p1.up()
+		if game.player1_keys.yn :
 			p1.down()
 
 	if game.player2_keys:
-		if game.player2_keys.yn :
-			p2.up()
 		if game.player2_keys.yp :
+			p2.up()
+		if game.player2_keys.yn :
 			p2.down()
 
 	game.addLine(0, 100, 500, 100, EdgeLaser.LaserColor.LIME)

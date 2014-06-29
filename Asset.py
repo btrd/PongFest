@@ -24,16 +24,23 @@ class Player(Asset):
 		Asset.__init__(self, game, x, 250, x, 350)
 		self.sco = 0
 		self.num = num
+		self.lose = False
 
 	def draw(self):
 			self.game.addLine(self.x1, self.y1, self.x2, self.y2, EdgeLaser.LaserColor.LIME)
 
 	def up(self):
-		if self.y1>100:
-			self.y1 += v
-			self.y2 += v
-
-	def down(self):
-		if self.y2<500:
+		if self.y1>120:
 			self.y1 -= v
 			self.y2 -= v
+		else:
+			self.y1 = 100
+			self.y2 = 200
+
+	def down(self):
+		if self.y2<480:
+			self.y1 += v
+			self.y2 += v
+		else:
+			self.y1 = 400
+			self.y2 = 500
