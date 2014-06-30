@@ -63,4 +63,4 @@ while not game.isStopped():
 		p2.draw()
 
 	game.refresh()
-	time.sleep(0.05)
+	time.sleep(0.02)

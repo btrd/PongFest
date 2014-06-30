@@ -1,9 +1,9 @@
 import EdgeLaser
 
 #global player speed
-Gps=20
+Gps=10
 #global ball speed
-Gbs=10
+Gbs=5
 
 class Asset:
 
@@ -52,7 +52,6 @@ class Player(Asset):
 
 class Ball(Asset):
 	def __init__(self, game,p):
-		print p
 		self.bs=Gbs
 		Asset.__init__(self, game, 240, 290, 260, 310)
 		self.v=5
@@ -91,6 +90,7 @@ class Ball(Asset):
 			#test si p1 est sur la balle
 			if (self.y2>p1.y1 and self.y2<p1.y2) or (self.y1>p1.y1 and self.y1<p1.y2):
 				#p1 rattrape la balle
+				print 'TODO'
 				self.dx=-self.dx
 				self.dy=-self.dy
 			else:
@@ -101,6 +101,7 @@ class Ball(Asset):
 			#test si p2 est sur la balle
 			if (self.y2>p2.y1 and self.y2<p2.y2) or (self.y1>p2.y1 and self.y1<p2.y2):
 				#p2 rattrape la balle
+				print 'TODO'
 				self.dx=-self.dx
 				self.dy=-self.dy
 			else:
@@ -109,7 +110,7 @@ class Ball(Asset):
 				p1.win=True
 		elif self.y1==101 or self.y1==499:
 			#touche les bords
-			print 'todo'
+			print 'TODO'
 
 		if not p1.win and not p2.win:
 			self.draw()
