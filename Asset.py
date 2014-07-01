@@ -18,6 +18,9 @@ class Asset:
 		self.x2 = x2
 		self.y2 = y2
 
+	def __str__(self):
+		return "x1:"+str(self.x1)+";x2:"+str(self.x2)+";y1:"+str(self.y1)+";y2:"+str(self.y2)
+
 class Player(Asset):
 	def __init__(self, game, num):
 		if num==1:
@@ -61,9 +64,7 @@ class Ball(Asset):
 		else:
 			self.dx=self.bs
 		self.dy=0
-
-	def __str__(self):
-		return "x1:{self.x1};x2:{self.x2};y1:{self.y1};y2:{self.y2}"
+		self.lastPoint = Point.__init__(self.lastPoint, self.x1,self.y1,self.x2,self.y2)
 
 	def draw(self):
 		self.x2+=self.dx
@@ -86,13 +87,17 @@ class Ball(Asset):
 		self.game.addRectangle(self.x1, self.y1, self.x2, self.y2)
 
 	def conflict(self, p1, p2):
+		print self.lastPoint
 		if self.x1 == 6:
 			#test si p1 est sur la balle
 			if (self.y2>p1.y1 and self.y2<p1.y2) or (self.y1>p1.y1 and self.y1<p1.y2):
 				#p1 rattrape la balle
-				print 'TODO'
+				print 'TODO P1'
+				self.dy=-Gbs
 				self.dx=-self.dx
 				self.dy=-self.dy
+				#enregistre le dernier point
+				self.lastPoint = Point.__init__(self.x1,self.y1,self.x2,self.y2)
 			else:
 				#p1 perdu
 				p2.score+=1
@@ -101,16 +106,38 @@ class Ball(Asset):
 			#test si p2 est sur la balle
 			if (self.y2>p2.y1 and self.y2<p2.y2) or (self.y1>p2.y1 and self.y1<p2.y2):
 				#p2 rattrape la balle
-				print 'TODO'
-				self.dx=-self.dx
-				self.dy=-self.dy
+				print 'TODO P2'
+				self.dy = Gbs
+				self.dx =- self.dx
+				self.dy =- self.dy
+				#enregistre le dernier point
+				self.lastPoint = Point.__init__(self.x1,self.y1,self.x2,self.y2)
 			else:
 				#p2 perdu
 				p1.score+=1
 				p1.win=True
-		elif self.y1==101 or self.y1==499:
+		elif self.y1==101 or self.y2==499:
 			#touche les bords
-			print 'TODO'
+			print 'TODO W'
+			self.dy =- self.dy
+			#enregistre le dernier point
+			self.lastPoint = Point.__init__(self.x1,self.y1,self.x2,self.y2)
 
 		if not p1.win and not p2.win:
 			self.draw()
+
+	def calcTraj():
+
+		return 
+
+class Point:
+
+	def __init__(x1, y1, x2, y2):
+		self.x1 = x1
+		self.y1 = y1
+
+		self.x2 = x2
+		self.y2 = y2
+
+	def __str__(self):
+		return "x1:"+str(self.x1)+";x2:"+str(self.x2)+";y1:"+str(self.y1)+";y2:"+str(self.y2)
