@@ -90,9 +90,11 @@ class Ball(Asset):
 			#test si p1 est sur la balle
 			if (self.y2>p1.y1 and self.y2<p1.y2) or (self.y1>p1.y1 and self.y1<p1.y2):
 				#p1 rattrape la balle
-				print 'TODO'
-				self.dx=-self.dx
-				self.dy=-self.dy
+				#centre de la balle
+				yb = self.y1+10
+				self.dy = (yb-p1.y1-50)*0.2
+				self.dx =-self.dx+0.5
+				print self.dy
 			else:
 				#p1 perdu
 				p2.score+=1
@@ -101,16 +103,21 @@ class Ball(Asset):
 			#test si p2 est sur la balle
 			if (self.y2>p2.y1 and self.y2<p2.y2) or (self.y1>p2.y1 and self.y1<p2.y2):
 				#p2 rattrape la balle
-				print 'TODO'
-				self.dx=-self.dx
-				self.dy=-self.dy
+				#centre de la balle
+				yb = self.y1+10
+				self.dy = (yb-p2.y1-50)*0.2
+				self.dx =-self.dx+0.5
+				print self.dy
 			else:
 				#p2 perdu
 				p1.score+=1
 				p1.win=True
-		elif self.y1==101 or self.y1==499:
+		elif self.y1==101 or self.y2==499:
 			#touche les bords
 			print 'TODO'
+			print self.dy
+			self.dy=-self.dy
+			print self.dy
 
 		if not p1.win and not p2.win:
 			self.draw()
