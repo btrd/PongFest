@@ -92,9 +92,10 @@ class Ball(Asset):
 				#p1 rattrape la balle
 				#centre de la balle
 				yb = self.y1+10
+				#calcul trajectoire sur y en prenant la distance par rapport au centre de la raquette
 				self.dy = (yb-p1.y1-50)*0.2
-				self.dx =-self.dx+0.5
-				print self.dy
+				#inversion du sens de la balle + augmentation vitesse
+				self.dx = -self.dx+1
 			else:
 				#p1 perdu
 				p2.score+=1
@@ -105,19 +106,17 @@ class Ball(Asset):
 				#p2 rattrape la balle
 				#centre de la balle
 				yb = self.y1+10
+				#calcul trajectoire sur y en prenant la distance par rapport au centre de la raquette
 				self.dy = (yb-p2.y1-50)*0.2
-				self.dx =-self.dx+0.5
-				print self.dy
+				#inversion du sens de la balle + augmentation vitesse
+				self.dx = -self.dx-1
 			else:
 				#p2 perdu
 				p1.score+=1
 				p1.win=True
 		elif self.y1==101 or self.y2==499:
 			#touche les bords
-			print 'TODO'
-			print self.dy
 			self.dy=-self.dy
-			print self.dy
 
 		if not p1.win and not p2.win:
 			self.draw()
