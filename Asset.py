@@ -120,3 +120,4 @@ class Ball(Asset):
 
 		if not p1.win and not p2.win:
 			self.draw()
+			
