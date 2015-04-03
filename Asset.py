@@ -2,11 +2,17 @@ import EdgeLaser
 import json
 import requests
 import copy
+from sessions import FuturesSession
 
 #global player speed
 Gps=5
 #global ball speed
 Gbs=3
+
+server="http://shadok-pong.scalingo.io"
+#server="http://localhost:3000"
+
+session = FuturesSession()
 
 class Asset:
 
@@ -22,14 +28,16 @@ class Asset:
 		self.y2 = y2
 
 class Player(Asset):
-	def __init__(self, game, num):
-		if num==1:
+	def __init__(self, game, side):
+		if side=='left':
 			x=5;
-		else:
+		elif side=='right':
 			x=495
+		else:
+			print 'Error side player' + side
 		Asset.__init__(self, game, x, 250, x, 350)
 		self.score = 0
-		self.num = num
+		self.side = side
 		self.win = False
 
 	def draw(self):
@@ -43,6 +51,11 @@ class Player(Asset):
 		else:
 			self.y1 = 101
 			self.y2 = 201
+
+		#diffusion
+		data = {'player':self.side,'x1':self.x1,'x2':self.x2,'y1':self.x1,'y2':self.x2}
+		headers = {'Content-Type':'application/json'}
+		future = session.post(server + '/api/raquette', data=json.dumps(data), headers=headers)
 
 	def down(self):
 		#On test si on va pas sortir du terrain de jeux
@@ -144,11 +157,10 @@ class Ball(Asset):
 
 		#diffusion
 		data = {'x1':b.x1,'x2':b.x2,'y1':b.x1,'y2':b.x2}
-		data_json = json.dumps(data)
-		payload = {'json_playload': data_json}
-		#r = requests.post('http://shadok-pong.scalingo.io/api/fictif', data=payload)
+		headers = {'Content-Type':'application/json'}
+		future = session.post(server + '/api/fictif', data=json.dumps(data), headers=headers)
 	
 	def sendScore(self, p1, p2):
 		data = {'left':p1.score,'right':p2.score}
 		headers = {'Content-Type':'application/json'}
-		r = requests.post('http://shadok-pong.scalingo.io/api/score', data=json.dumps(data), headers=headers)
+		future = session.post(server + '/api/score', data=json.dumps(data), headers=headers)

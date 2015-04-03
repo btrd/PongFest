@@ -14,8 +14,8 @@ while True:
         time.sleep(0.5)
 
 	#creation des joueurs
-	p1 = Asset.Player(game,1)
-	p2 = Asset.Player(game,2)
+	p1 = Asset.Player(game,'left')
+	p2 = Asset.Player(game,'right')
 
 	#premiere balle de match
 	b = Asset.Ball(game,random.randint(1,2))
