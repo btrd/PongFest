@@ -2,9 +2,18 @@ import EdgeLaser
 import time
 import Asset
 import random
+import argparse
 
-game = EdgeLaser.LaserGame('PongFest')
+parser = argparse.ArgumentParser()
+parser.add_argument("-H","--host",default=EdgeLaser.HOST)
+parser.add_argument("-P", "--port", type=int, default=EdgeLaser.PORT)
+
+args=parser.parse_args()
+
+game = EdgeLaser.LaserGame('PongFest',args.host,args.port)
 font = EdgeLaser.LaserFont('lcd.elfc')
+
+
 
 game.setResolution(500).setDefaultColor(EdgeLaser.LaserColor.LIME)
 
