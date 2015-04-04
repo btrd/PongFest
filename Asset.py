@@ -119,6 +119,9 @@ class Ball(Asset):
 				p2.score += 1
 				p2.win=True
 				self.sendScore(p1, p2)
+				if p2.score >= 10:
+					p1.score = 0
+					p2.score = 0
 		elif self.x2 == 494:
 			#test si p2 est sur la balle
 			if (self.y2 > p2.y1 and self.y2 < p2.y2) or (self.y1 > p2.y1 and self.y1 < p2.y2):
@@ -136,6 +139,9 @@ class Ball(Asset):
 				p1.score += 1
 				p1.win = True
 				self.sendScore(p1, p2)
+				if p1.score >= 10:
+					p1.score = 0
+					p2.score = 0
 		elif self.y1 == 101 or self.y2 == 499:
 			#touche les bords
 			self.dy = -self.dy
