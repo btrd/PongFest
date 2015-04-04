@@ -5,7 +5,7 @@ import copy
 from sessions import FuturesSession
 
 #global player speed
-Gps=5
+Gps=2
 #global ball speed
 Gbs=3
 
@@ -48,14 +48,13 @@ class Player(Asset):
 		if self.y1>120:
 			self.y1 -= Gps
 			self.y2 -= Gps
+			#diffusion
+			data = {'player':self.side,'x1':self.x1,'x2':self.x2,'y1':self.x1,'y2':self.x2}
+			headers = {'Content-Type':'application/json'}
+			future = session.post(server + '/api/raquette', data=json.dumps(data), headers=headers)
 		else:
 			self.y1 = 101
 			self.y2 = 201
-
-		#diffusion
-		data = {'player':self.side,'x1':self.x1,'x2':self.x2,'y1':self.x1,'y2':self.x2}
-		headers = {'Content-Type':'application/json'}
-		future = session.post(server + '/api/raquette', data=json.dumps(data), headers=headers)
 
 	def down(self):
 		#On test si on va pas sortir du terrain de jeux
