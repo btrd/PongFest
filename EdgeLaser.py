@@ -261,7 +261,7 @@ class LaserGame(object):
     HOST = '127.0.0.1'
     PORT = 4242
 
-    def __init__(self,gamename):
+    def __init__(self,gamename,host=HOST,port=PORT):
         self.gameid = 0
         self.gamename = gamename
         self.sock = None
@@ -271,7 +271,8 @@ class LaserGame(object):
         self.color = LaserColor.LIME # Because it's REALLY awesome
 
         self.sock = socket.socket(type=socket.SOCK_DGRAM)
-        self.sock.connect((HOST, PORT))
+        print("Connecting to laser server : {}:{}".format(host,port))
+        self.sock.connect((host, port))
         self.sock.setblocking(0)
 
         self.sendCmd(HelloPacket.build(Container(id='\x00', gamename=gamename)))
