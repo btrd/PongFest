@@ -22,6 +22,8 @@ while True:
         game.receiveServerCommands()
         time.sleep(0.5)
 
+    game_mode="GAME"
+
     #creation des joueurs
     p1 = Asset.Player(game,'left')
     p2 = Asset.Player(game,'right')
@@ -33,32 +35,71 @@ while True:
         game.receiveServerCommands()
 
         #ligne de separation
-        game.addLine(0, 100, 500, 100)
-        game.addLine(0, 500, 500, 500)
-        if p1.win:
-            b = Asset.Ball(game,1)
-            p1.win = False
-        elif p2.win:
-            b = Asset.Ball(game,2)
-            p2.win = False
+        #game.addLine(0, 100, 500, 100)
+        #game.addLine(0, 500, 500, 500)
 
-        #mouvements des joueurs
-        if game.player1_keys:
-            if game.player1_keys.yp :
-                p1.up()
-            if game.player1_keys.yn :
-                p1.down()
-        if game.player2_keys:
-            if game.player2_keys.yp :
-                p2.up()
-            if game.player2_keys.yn :
-                p2.down()
+        if game_mode=="GAME":
 
-        b.conflict(p1,p2)
+            if p1.win:
+                b = Asset.Ball(game,1)
+                p1.win = False
 
-        #affichage des joueurs
-        p1.draw()
-        p2.draw()
+                game_mode = "SCORE"
+            elif p2.win:
+                b = Asset.Ball(game,2)
+                p2.win = False
 
-        game.refresh()
-        time.sleep(0.02)
+                game_mode = "SCORE"
+
+            #mouvements des joueurs
+            if game.player1_keys:
+                if game.player1_keys.yp :
+                    p1.up()
+                if game.player1_keys.yn :
+                    p1.down()
+            if game.player2_keys:
+                if game.player2_keys.yp :
+                    p2.up()
+                if game.player2_keys.yn :
+                    p2.down()
+
+            b.conflict(p1,p2)
+
+            #affichage des joueurs
+            p1.draw()
+            p2.draw()
+
+            game.refresh()
+            time.sleep(0.02)
+
+        elif game_mode == "SCORE" :
+
+            game.refresh()
+
+            font.render(game, "{} - {}".format(p1.score, p2.score), 0, 250, coeff=8)
+
+            game.refresh()
+
+            time.sleep(2)
+
+            if p1.score < 1 or p2.score < 1:
+
+                font.render(game, "CONNECT", 0, 250, coeff=4)
+
+                game.refresh()
+
+                time.sleep(1)
+
+                font.render(game, "  TO", 0, 250, coeff=4)
+
+                game.refresh()
+
+                time.sleep(1)
+
+                font.render(game, "PONG.PW", 0, 250, coeff=4)
+
+                game.refresh()
+
+                time.sleep(3)
+
+            game_mode="GAME"
