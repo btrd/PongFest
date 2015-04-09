@@ -9,8 +9,8 @@ Gps=2
 #global ball speed
 Gbs=3
 
-LEFT_SIDE_COLOR = EdgeLaser.LaserColor.LIME
-RIGHT_SIDE_COLOR = EdgeLaser.LaserColor.CYAN
+LEFT_SIDE_COLOR = EdgeLaser.LaserColor.CYAN
+RIGHT_SIDE_COLOR = EdgeLaser.LaserColor.LIME
 BALL_COLOR = EdgeLaser.LaserColor.YELLOW
 
 server="http://shadok-pong.scalingo.io"
