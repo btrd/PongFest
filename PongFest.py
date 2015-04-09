@@ -7,10 +7,11 @@ import datetime
 
 
 def printText(text, t):
-    print("Printing : "+text )
+    text_size = font.size(text,4)
+    offset_x = (Asset.RESOLUTION - text_size) / 2
     start = datetime.datetime.now()
     while (datetime.datetime.now() - start).total_seconds() < t:
-        font.render(game, text, 0, 250, coeff=4)
+        font.render(game, text, offset_x, 250, coeff=4)
         game.refresh()
         time.sleep(0.1)
     return
@@ -26,7 +27,7 @@ font = EdgeLaser.LaserFont('lcd.elfc')
 
 
 
-game.setResolution(500).setDefaultColor(EdgeLaser.LaserColor.LIME)
+game.setResolution(Asset.RESOLUTION).setDefaultColor(EdgeLaser.LaserColor.LIME)
 
 while True:
     while game.isStopped():
@@ -90,8 +91,8 @@ while True:
             printText("{} - {}".format(p1.score, p2.score),2)
 
             if p1.score < 1 and p2.score < 1:
-                printText("CONNECT",1)
-                printText("  TO", 1)
+                printText("CONNECT",2)
+                printText("TO", 1)
                 printText("PONG.PW",3)
 
             game_mode="GAME"

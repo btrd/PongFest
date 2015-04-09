@@ -457,6 +457,30 @@ class LaserFont(object):
                     coordlist.append(struct.unpack('B', val)[0])
                 self.letters[char] = coordlist
 
+    def size(self,text, coeff=1,spacing_factor=8):
+        if coeff < 1:
+            coeff = 1
+
+        if coeff == 1:
+            scaledletters = self.letters
+        else:
+            scaledletters = {}
+            for char in self.letters.keys():
+                scaledvals = []
+                for val in self.letters[char]:
+                    scaledvals.append(val * coeff)
+                scaledletters[char] = scaledvals
+        offset_x = 0
+        for char in text:
+            tmp_offset = 0
+            if char == ' ':
+                tmp_offset = spacing_factor * coeff
+            else:
+                for line in grouper(4, scaledletters[char]):
+                    tmp_offset = max(tmp_offset, max(line[0], line[2]))
+            offset_x += tmp_offset + self.spacing * coeff
+        return offset_x
+
     def render(self, game, text, x, y, color=LaserColor.LIME, coeff=1, spacing_factor=8):
         offset_x = x
         offset_y = y

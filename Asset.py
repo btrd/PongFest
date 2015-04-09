@@ -56,7 +56,7 @@ class Player(Asset):
 
     def up(self):
         #On test si on va pas sortir du terrain de jeux
-        if self.y1>MIN_Y+BALL_SIZE:
+        if self.y1 > MIN_Y + Gps:
             self.y1 -= Gps
             self.y2 -= Gps
             #diffusion
@@ -70,7 +70,7 @@ class Player(Asset):
 
     def down(self):
         #On test si on va pas sortir du terrain de jeux
-        if self.y2<MAX_Y-BALL_SIZE:
+        if self.y1 < MAX_Y - RACKET_SIZE - Gps:
             self.y1 += Gps
             self.y2 += Gps
             #diffusion
@@ -79,8 +79,8 @@ class Player(Asset):
             headers = {'Content-Type':'application/json'}
             future = session.post(server + '/api/racket', data=json.dumps(data), headers=headers)
         else:
-            self.y1 = MAX_Y
-            self.y2 = MAX_Y + RACKET_SIZE
+            self.y1 = MAX_Y - RACKET_SIZE
+            self.y2 = MAX_Y
 
 class Ball(Asset):
     def __init__(self, game,p):
