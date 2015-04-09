@@ -14,6 +14,12 @@ server="http://shadok-pong.scalingo.io"
 
 session = FuturesSession()
 
+MIN_Y = 5
+MAX_Y = 495
+RESOLUTION = 500
+RACKET_SIZE = 100
+BALL_SIZE = 20
+
 class Asset:
 
     def __init__(self, game, x1, y1, x2, y2):
@@ -45,7 +51,7 @@ class Player(Asset):
 
     def up(self):
         #On test si on va pas sortir du terrain de jeux
-        if self.y1>120:
+        if self.y1>MIN_Y+BALL_SIZE:
             self.y1 -= Gps
             self.y2 -= Gps
             #diffusion
@@ -54,12 +60,12 @@ class Player(Asset):
             headers = {'Content-Type':'application/json'}
             future = session.post(server + '/api/racket', data=json.dumps(data), headers=headers)
         else:
-            self.y1 = 101
-            self.y2 = 201
+            self.y1 = MIN_Y
+            self.y2 = MIN_Y + RACKET_SIZE
 
     def down(self):
         #On test si on va pas sortir du terrain de jeux
-        if self.y2<480:
+        if self.y2<MAX_Y-BALL_SIZE:
             self.y1 += Gps
             self.y2 += Gps
             #diffusion
@@ -68,8 +74,8 @@ class Player(Asset):
             headers = {'Content-Type':'application/json'}
             future = session.post(server + '/api/racket', data=json.dumps(data), headers=headers)
         else:
-            self.y1 = 399
-            self.y2 = 499
+            self.y1 = MAX_Y
+            self.y2 = MAX_Y + RACKET_SIZE
 
 class Ball(Asset):
     def __init__(self, game,p):
@@ -98,12 +104,12 @@ class Ball(Asset):
         if self.x2 >= 495:
             self.x1 = 474
             self.x2 = 494
-        if self.y1 <= 100:
-            self.y1 = 101
-            self.y2 = 121
-        if self.y2 >= 500:
-            self.y1 = 479
-            self.y2 = 499
+        if self.y1 <= MIN_Y:
+            self.y1 = MIN_Y + 1
+            self.y2 = MIN_Y + BALL_SIZE + 1
+        if self.y2 >= MAX_Y:
+            self.y1 = MAX_Y - (BALL_SIZE + 1)
+            self.y2 = MAX_Y - 1
         self.game.addRectangle(self.x1, self.y1, self.x2, self.y2)
 
     def conflict(self, p1, p2):
@@ -147,7 +153,7 @@ class Ball(Asset):
                 if p1.score >= 10:
                     p1.score = 0
                     p2.score = 0
-        elif self.y1 == 101 or self.y2 == 499:
+        elif self.y1 == MIN_Y + 1 or self.y2 == MAX_Y - 1:
             #touche les bords
             self.dy = -self.dy
 
@@ -159,7 +165,7 @@ class Ball(Asset):
         #tant qu'on est pas sur les bords
         while b.x1 > 6 and b.x2 < 494:
             #si on touche le sol ou le plafond
-            if b.y1 <= 101 or b.y2 >= 499:
+            if b.y1 <= MIN_Y + 1 or b.y2 >= MAX_Y - 1:
                 b.dy = -b.dy
             b.x2 += b.dx
             b.y2 += b.dy
