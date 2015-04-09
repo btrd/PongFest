@@ -3,6 +3,7 @@ import json
 import requests
 import copy
 from sessions import FuturesSession
+import functools
 
 #global player speed
 Gps=2
@@ -37,6 +38,9 @@ class Asset:
         self.x2 = x2
         self.y2 = y2
 
+def request_callback(incoming_path, incoming_data, sess, resp):
+	print("Callback {} ({}) response: {} {}".format(incoming_path, incoming_data, resp.status_code, resp.content))
+
 class Player(Asset):
     def __init__(self, game, side):
         if side=='left':
@@ -63,7 +67,10 @@ class Player(Asset):
             y = self.y1 + ( (self.y2 - self.y1) / 2 )
             data = {'side':self.side,'y':y}
             headers = {'Content-Type':'application/json'}
-            future = session.post(server + '/api/racket', data=json.dumps(data), headers=headers)
+            future = session.post(server + '/api/racket', 
+            	data=json.dumps(data), 
+            	headers=headers, 
+            	background_callback=functools.partial(request_callback, '/api/racket', data))
         else:
             self.y1 = MIN_Y
             self.y2 = MIN_Y + RACKET_SIZE
@@ -77,7 +84,10 @@ class Player(Asset):
             y = self.y1 + ( (self.y2 - self.y1) / 2 )
             data = {'side':self.side,'y':y}
             headers = {'Content-Type':'application/json'}
-            future = session.post(server + '/api/racket', data=json.dumps(data), headers=headers)
+            future = session.post(server + '/api/racket', 
+            	data=json.dumps(data), 
+            	headers=headers, 
+            	background_callback=functools.partial(request_callback, '/api/racket', data))
         else:
             self.y1 = MAX_Y
             self.y2 = MAX_Y + RACKET_SIZE
@@ -185,11 +195,17 @@ class Ball(Asset):
 
         y = int(self.y1 + ( (self.y2 - self.y1) / 2 ))
         data = {'side':side,'y':y}
-        print data
+        print("POST /fictif : {}".format(data))
         headers = {'Content-Type':'application/json'}
-        future = session.post(server + '/api/fictif', data=json.dumps(data), headers=headers)
+        future = session.post(server + '/api/fictif', 
+            	data=json.dumps(data), 
+            	headers=headers, 
+            	background_callback=functools.partial(request_callback, '/api/fictif', data))
 
     def sendScore(self, p1, p2):
         data = {'left':p1.score,'right':p2.score}
         headers = {'Content-Type':'application/json'}
-        future = session.post(server + '/api/score', data=json.dumps(data), headers=headers)
+        future = session.post(server + '/api/score', 
+            	data=json.dumps(data), 
+            	headers=headers, 
+            	background_callback=functools.partial(request_callback, '/api/score', data))
