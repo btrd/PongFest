@@ -49,9 +49,10 @@ class Player(Asset):
 			self.y1 -= Gps
 			self.y2 -= Gps
 			#diffusion
-			data = {'player':self.side,'x1':self.x1,'x2':self.x2,'y1':self.x1,'y2':self.x2}
+			y = self.y1 + ( (self.y2 - self.y1) / 2 )
+			data = {'side':self.side,'y':y}
 			headers = {'Content-Type':'application/json'}
-			future = session.post(server + '/api/raquette', data=json.dumps(data), headers=headers)
+			future = session.post(server + '/api/racket', data=json.dumps(data), headers=headers)
 		else:
 			self.y1 = 101
 			self.y2 = 201
@@ -61,6 +62,11 @@ class Player(Asset):
 		if self.y2<480:
 			self.y1 += Gps
 			self.y2 += Gps
+			#diffusion
+			y = self.y1 + ( (self.y2 - self.y1) / 2 )
+			data = {'side':self.side,'y':y}
+			headers = {'Content-Type':'application/json'}
+			future = session.post(server + '/api/racket', data=json.dumps(data), headers=headers)
 		else:
 			self.y1 = 399
 			self.y2 = 499
@@ -160,8 +166,14 @@ class Ball(Asset):
 			b.y1 += b.dy
 			b.x1 += b.dx
 
+		print b.x1
 		#diffusion
-		data = {'x1':b.x1,'x2':b.x2,'y1':b.x1,'y2':b.x2}
+		if b.x1 < 250:
+			side = "left"
+		else:
+			side = "right"
+		y = self.y1 + ( (self.y2 - self.y1) / 2 )
+		data = {'side':side,'y':y}
 		headers = {'Content-Type':'application/json'}
 		future = session.post(server + '/api/fictif', data=json.dumps(data), headers=headers)
 	
