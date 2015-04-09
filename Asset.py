@@ -9,6 +9,10 @@ Gps=2
 #global ball speed
 Gbs=3
 
+LEFT_SIDE_COLOR = EdgeLaser.LaserColor.LIME
+RIGHT_SIDE_COLOR = EdgeLaser.LaserColor.CYAN
+BALL_COLOR = EdgeLaser.LaserColor.YELLOW
+
 server="http://shadok-pong.scalingo.io"
 #server="http://localhost:3000"
 
@@ -45,9 +49,10 @@ class Player(Asset):
         self.score = 0
         self.side = side
         self.win = False
+        self.color = LEFT_SIDE_COLOR if side=="left" else RIGHT_SIDE_COLOR
 
     def draw(self):
-        self.game.addLine(self.x1, self.y1, self.x2, self.y2)
+        self.game.addLine(self.x1, self.y1, self.x2, self.y2, self.color)
 
     def up(self):
         #On test si on va pas sortir du terrain de jeux
@@ -110,7 +115,7 @@ class Ball(Asset):
         if self.y2 >= MAX_Y:
             self.y1 = MAX_Y - (BALL_SIZE + 1)
             self.y2 = MAX_Y - 1
-        self.game.addRectangle(self.x1, self.y1, self.x2, self.y2)
+        self.game.addRectangle(self.x1, self.y1, self.x2, self.y2, BALL_COLOR)
 
     def conflict(self, p1, p2):
         if self.x1 == 6:
@@ -183,7 +188,7 @@ class Ball(Asset):
         print data
         headers = {'Content-Type':'application/json'}
         future = session.post(server + '/api/fictif', data=json.dumps(data), headers=headers)
-    
+
     def sendScore(self, p1, p2):
         data = {'left':p1.score,'right':p2.score}
         headers = {'Content-Type':'application/json'}

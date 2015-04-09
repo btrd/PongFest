@@ -3,6 +3,17 @@ import time
 import Asset
 import random
 import argparse
+import datetime
+
+
+def printText(text, t):
+    print("Printing : "+text )
+    start = datetime.datetime.now()
+    while (datetime.datetime.now() - start).total_seconds() < t:
+        font.render(game, text, 0, 250, coeff=4)
+        game.refresh()
+        time.sleep(0.1)
+    return
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-H","--host",default=EdgeLaser.HOST)
@@ -76,30 +87,11 @@ while True:
 
             game.refresh()
 
-            font.render(game, "{} - {}".format(p1.score, p2.score), 0, 250, coeff=8)
-
-            game.refresh()
-
-            time.sleep(2)
+            printText("{} - {}".format(p1.score, p2.score),2)
 
             if p1.score < 1 and p2.score < 1:
-
-                font.render(game, "CONNECT", 0, 250, coeff=4)
-
-                game.refresh()
-
-                time.sleep(1)
-
-                font.render(game, "  TO", 0, 250, coeff=4)
-
-                game.refresh()
-
-                time.sleep(1)
-
-                font.render(game, "PONG.PW", 0, 250, coeff=4)
-
-                game.refresh()
-
-                time.sleep(3)
+                printText("CONNECT",1)
+                printText("  TO", 1)
+                printText("PONG.PW",3)
 
             game_mode="GAME"
