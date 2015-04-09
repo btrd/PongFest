@@ -82,7 +82,7 @@ while True:
 
             time.sleep(2)
 
-            if p1.score < 1 or p2.score < 1:
+            if p1.score < 1 and p2.score < 1:
 
                 font.render(game, "CONNECT", 0, 250, coeff=4)
 
