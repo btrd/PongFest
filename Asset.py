@@ -22,7 +22,7 @@ session = FuturesSession()
 MIN_Y = 5
 MAX_Y = 495
 RESOLUTION = 500
-RACKET_SIZE = 80
+RACKET_SIZE = 100
 BALL_SIZE = 20
 
 class Asset:
