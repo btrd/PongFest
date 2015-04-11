@@ -49,7 +49,8 @@ class Player(Asset):
             x=495
         else:
             print 'Error side player' + side
-        Asset.__init__(self, game, x, 250, x, 350)
+        centre = (MAX_Y - MIN_Y) / 2
+        Asset.__init__(self, game, x, centre - (RACKET_SIZE/2), x, centre + (RACKET_SIZE/2))
         self.score = 0
         self.side = side
         self.win = False
@@ -59,38 +60,36 @@ class Player(Asset):
         self.game.addLine(self.x1, self.y1, self.x2, self.y2, self.color)
 
     def up(self):
-        #On test si on va pas sortir du terrain de jeux
-        if self.y1>MIN_Y+BALL_SIZE:
-            self.y1 -= Gps
-            self.y2 -= Gps
-            #diffusion
-            y = self.y1 + ( (self.y2 - self.y1) / 2 )
-            data = {'side':self.side,'y':y}
-            headers = {'Content-Type':'application/json'}
-            future = session.post(server + '/api/racket', 
-            	data=json.dumps(data), 
-            	headers=headers, 
-            	background_callback=functools.partial(request_callback, '/api/racket', data))
-        else:
+        self.y1 -= Gps
+        self.y2 -= Gps
+        #On test si on sort du terrain de jeux
+        if self.y1 < MIN_Y:
             self.y1 = MIN_Y
             self.y2 = MIN_Y + RACKET_SIZE
+        #diffusion
+        y = self.y1 + ( (self.y2 - self.y1) / 2 )
+        data = {'side':self.side,'y':y}
+        headers = {'Content-Type':'application/json'}
+        future = session.post(server + '/api/racket', 
+        	data=json.dumps(data), 
+        	headers=headers, 
+        	background_callback=functools.partial(request_callback, '/api/racket', data))
 
     def down(self):
-        #On test si on va pas sortir du terrain de jeux
-        if self.y2<MAX_Y-BALL_SIZE:
-            self.y1 += Gps
-            self.y2 += Gps
-            #diffusion
-            y = self.y1 + ( (self.y2 - self.y1) / 2 )
-            data = {'side':self.side,'y':y}
-            headers = {'Content-Type':'application/json'}
-            future = session.post(server + '/api/racket', 
-            	data=json.dumps(data), 
-            	headers=headers, 
-            	background_callback=functools.partial(request_callback, '/api/racket', data))
-        else:
-            self.y1 = MAX_Y
-            self.y2 = MAX_Y + RACKET_SIZE
+        self.y1 += Gps
+        self.y2 += Gps
+        #On test si on sort du terrain de jeux
+        if self.y2 > MAX_Y:
+            self.y2 = MAX_Y
+            self.y1 = MAX_Y - RACKET_SIZE
+        #diffusion
+        y = self.y1 + ( (self.y2 - self.y1) / 2 )
+        data = {'side':self.side,'y':y}
+        headers = {'Content-Type':'application/json'}
+        future = session.post(server + '/api/racket', 
+        	data=json.dumps(data), 
+        	headers=headers, 
+        	background_callback=functools.partial(request_callback, '/api/racket', data))
 
 class Ball(Asset):
     def __init__(self, game,p):
